@@ -63,7 +63,6 @@ def Receive():
 while 1:
 	try:
 		s.bind((HOST, PORT))
-		print "Port Connected"
 		break
 	except:
 		timer += fpsClock.get_time()
