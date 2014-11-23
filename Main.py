@@ -24,6 +24,7 @@ Send = ""
 timer = 0
 yp = 0
 xp = 0
+TryCon = False
 Shutdown = False
 NameLen = False
 Connected = False
@@ -45,6 +46,7 @@ broadcast_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 broadcast_socket.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
 broadcast_socket.settimeout(0)
 Users = {}
+Requests = {}
 
 while True:
 	try:
@@ -118,55 +120,73 @@ while True: #Connecting Loop
 			data = "QuitDe" + str(User[6:]) 
 		elif event.type == KEYDOWN:
 			if event.key == K_UP:
-				print "Up"
-				if yp == 0:
-					pass
-				else:
-					yp -= 1
+                                if TryCon == True:
+                                        pass
+                                else:
+                                        if yp == 0:
+                                                pass
+                                        else:
+                                                yp -= 1
 			elif event.key == K_DOWN:
-				print "Down"
-				if yp == (len(Users.keys()) -1):
-					pass
-				else:
-					yp += 1
-					print str(yp)
-			elif event.key == K_LEFT: # make change to 'a' and 'd' for accepting
-				xp -= 1
-			elif event.key == K_RIGHT:
-				xp += 1
+				if TryCon == True:
+                                        pass
+                                else:
+                                        if yp == (len(Users.keys()) -1):
+                                                pass
+                                        else:
+                                                yp += 1
+			elif event.key == K_a:
+                                if Users.values()[yp] in Requests.values():
+                                        accepted = True
+                        elif event.key == K_d:
+                                data = "ConDec" + Users.values()[yp]
+                                for x in Requests.values():
+                                        if addr[0] in x:
+                                                del Requests[Requests.keys()[Requests.values().index(str(x))]]
 			elif event.key == K_RETURN:
 				if cp == 0:
 					print "0: Online"
 				else:
-					data = "ConReq" + Users.values()[yp]
-	if data[:6] == "ConReq":
-		try:
-			s.connect(Users.values()[yp], PORT)
-		except:
-			print Users.values()[yp]
-
-	broadcast_socket.sendto(data, broadcast)
+					data = "ConReq" + Users.values()[yp] + str(User)
+                                        TryCon = True
+                        elif event.key == K_ESCAPE:
+                                data = "Cancel" + Users.values()[yp]
+                                TryCon = False
+        
+        broadcast_socket.sendto(data, broadcast)
 	
 	recv_data, addr = recieve_socket.recvfrom(2048)
+	# Conneting Requst
+        if TryCon == True:
+                if recv_data == "ConDec" + str(MYIP):
+                        TryCon = False
+                else:
+                        try:
+                                s.connect(Users.values()[yp], PORT)
+                        except:
+                                pass
+                                #print Users.values()[yp]
+	# Others
 	if recv_data[:6] == "UserNm":
 		#if addr[0] != MYIP and addr[0] not in Users.values(): #Connect to others
 		if addr[0] not in Users.values(): #Connect to yourself
 			Users[recv_data[6:]] = addr[0]
 	elif recv_data[:6] == "QuitDe":
 		del Users[recv_data[6:]]
-	elif recv_data == "ConReq" + str(MYIP):
-		if accepted == False:
-			if raw_input(str(recv_data[6:]) + " would like to connect (y/n)").upper() == "Y":
-				accepted = True
-		if accepted == True:
-			try:
-				s.connect((addr[0], PORT))
-				break
-			except:
-				print str(addr[0])
-
-	elif recv_data[:6] == "Cancel":
-		pass
+	elif recv_data[:6 + len(MYIP)] == "ConReq" + str(MYIP):
+                if recv_data not in Requests.keys():
+                        Requests[recv_data] = addr[0]
+        elif recv_data == "Cancel" + str(MYIP):
+                for x in Requests.values():
+                        if addr[0] in x:
+                                del Requests[Requests.keys()[Requests.values().index(str(x))]]
+        
+        if accepted == True:
+                        try:
+                                s.connect((addr[0], PORT))
+                                break
+                        except:
+                                print str(addr[0])
 		
 	
 	y = 10
@@ -183,12 +203,29 @@ while True: #Connecting Loop
                         pygame.draw.rect(screen, (255, 255, 255), Rect((16, y+6), (392, 16)), 0) # Base Box
                 UsersRen = Font.render(Users.keys()[z], 1, (0,0,0))
                 screen.blit(UsersRen, (18 , y+8))
+                
+                for c in Requests.keys():
+                        if Users.keys()[z] == c[12+len(str(MYIP)):]:
+                                pygame.draw.rect(screen, (20, 20, 20), Rect((416, y), (12, 28)), 0)
+                                pygame.draw.rect(screen, (255, 102, 0), Rect((418, y+2), (8, 24)), 0)
+                                if yp == z:
+                                        UserReqA = Font.render("A", 1, (44, 202, 60))
+                                        UserReqS = Font.render("/", 1, (0,0,0))
+                                        UserReqD = Font.render("D", 1, (233, 2, 22))
+                                        screen.blit(UserReqA, (380, y+8))
+                                        screen.blit(UserReqS, (392, y+8))
+                                        screen.blit(UserReqD, (397, y+8))
                         
                 y += 20
 		
 
 	pygame.draw.rect(screen, (1, 1, 1), Rect((0, 660), (500, 2)), 0)
 	pygame.draw.rect(screen, (255, 255, 255), Rect((0, 662), (500, 38)), 0) # w
+	
+	 """if TryCon == True: # for a planned connetting animation
+                trans = pygame.Surface((490, 690), pygame.SRCALPHA, 32)
+                trans.fill((120, 120, 120, 180))
+                screen.blit(trans, (5,5))"""
 	
 	pygame.display.update()
 	fpsClock.tick(60)
@@ -235,8 +272,8 @@ while True: #Talking Loop
 		Messages.append([Received[6:], 1])
 		Received = ''
 
-	x = 634
 	#render Messages
+	x = 634
 	for y in range(len(Messages)-1,-1,-1):
 		if x >= -10: # stops rendering above the view max
 			lenx, leny = Font.size(str(Messages[y][0]))
