@@ -170,14 +170,21 @@ while True: #Connecting Loop
 		
 	
 	y = 10
-	for z in range(len(Users.keys())):
-		UsersRen = Font.render(Users.keys()[z], 1, (0,0,0))
-		screen.blit(UsersRen, (34 , y))
-		y += 20
-	
-	if True:
-		pygame.draw.rect(screen, (1, 1, 1), Rect((24, (yp * 20) + 16), (10, 4)), 0)
-		
+        for z in range(len(Users.keys())):
+                if yp == z:
+                        pygame.draw.rect(screen, (20, 20, 20), Rect((10, y), (404, 28)), 0) # OUT SHAPE
+                        pygame.draw.rect(screen, (100, 100, 240), Rect((12, y+2), (400, 24)), 0) # SELECT C # 240
+                        pygame.draw.rect(screen, (1, 1, 1), Rect((14, y+4), (396, 20)), 0) # IN BOX
+                        pygame.draw.rect(screen, (255, 255, 255), Rect((16, y+6), (392, 16)), 0) # Base Box
+                else:
+                        pygame.draw.rect(screen, (20, 20, 20), Rect((10, y), (404, 28)), 0) # OUT SHAPE
+                        pygame.draw.rect(screen, (240, 240, 240), Rect((12, y+2), (400, 24)), 0) # SELECT C # 240
+                        pygame.draw.rect(screen, (1, 1, 1), Rect((14, y+4), (396, 20)), 0) # IN BOX
+                        pygame.draw.rect(screen, (255, 255, 255), Rect((16, y+6), (392, 16)), 0) # Base Box
+                UsersRen = Font.render(Users.keys()[z], 1, (0,0,0))
+                screen.blit(UsersRen, (18 , y+8))
+                        
+                y += 20
 		
 
 	pygame.draw.rect(screen, (1, 1, 1), Rect((0, 660), (500, 2)), 0)
