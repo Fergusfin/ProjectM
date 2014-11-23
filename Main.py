@@ -222,7 +222,7 @@ while True: #Connecting Loop
 	pygame.draw.rect(screen, (1, 1, 1), Rect((0, 660), (500, 2)), 0)
 	pygame.draw.rect(screen, (255, 255, 255), Rect((0, 662), (500, 38)), 0) # w
 	
-	 """if TryCon == True: # for a planned connetting animation
+	"""if TryCon == True: # for a planned connetting animation
                 trans = pygame.Surface((490, 690), pygame.SRCALPHA, 32)
                 trans.fill((120, 120, 120, 180))
                 screen.blit(trans, (5,5))"""
