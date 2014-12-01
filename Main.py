@@ -1,4 +1,4 @@
-#ProjectM 1.0.2
+#ProjectM ChatRoomBroadcast 1.0.2
 
 #Imports
 import pygame, sys
@@ -24,10 +24,8 @@ Send = ""
 timer = 0
 yp = 0
 xp = 0
-TryCon = False
 Shutdown = False
 NameLen = False
-Connected = False
 Received = ''
 data = ''
 accepted = False
@@ -41,25 +39,11 @@ recieve_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 recieve_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR,1)
 recieve_socket.bind(scan)
 recieve_socket.settimeout(0)
-broadcast = ('<broadcast>', 54545)
+broadcast = ('<broadcast>', 45454)
 broadcast_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 broadcast_socket.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
 broadcast_socket.settimeout(0)
 Users = {}
-Requests = {}
-
-while True:
-	try:
-		s.bind((HOST, PORT))
-		break
-	except:
-		timer += fpsClock.get_time()
-		if timer >= 5000:
-			print "ERROR: Could not bind port."
-			s.close()
-			pygame.quit()
-			sys.exit()
-			break
 
 while True: #Nameing Loop
 	screen.fill((236, 236, 236))
@@ -108,133 +92,10 @@ while True: #Nameing Loop
 	pygame.display.update()
 	fpsClock.tick(60)
 
-while True: #Connecting Loop
-	screen.fill((236, 236, 236))
-	cp = len(Users.keys())
-	for event in pygame.event.get():
-		if event.type == QUIT:
-			Shutdown = True
-			s.close()
-			pygame.quit()
-			sys.exit()
-			data = "QuitDe" + str(User[6:]) 
-		elif event.type == KEYDOWN:
-			if event.key == K_UP:
-                                if TryCon == True:
-                                        pass
-                                else:
-                                        if yp == 0:
-                                                pass
-                                        else:
-                                                yp -= 1
-			elif event.key == K_DOWN:
-				if TryCon == True:
-                                        pass
-                                else:
-                                        if yp == (len(Users.keys()) -1):
-                                                pass
-                                        else:
-                                                yp += 1
-			elif event.key == K_a:
-                                if Users.values()[yp] in Requests.values():
-                                        accepted = True
-                        elif event.key == K_d:
-                                data = "ConDec" + Users.values()[yp]
-                                for x in Requests.values():
-                                        if addr[0] in x:
-                                                del Requests[Requests.keys()[Requests.values().index(str(x))]]
-			elif event.key == K_RETURN:
-				if cp == 0:
-					print "0: Online"
-				else:
-					data = "ConReq" + Users.values()[yp] + str(User)
-                                        TryCon = True
-                        elif event.key == K_ESCAPE:
-                                data = "Cancel" + Users.values()[yp]
-                                TryCon = False
-        
-        broadcast_socket.sendto(data, broadcast)
-	
-	recv_data, addr = recieve_socket.recvfrom(2048)
-	# Conneting Requst
-        if TryCon == True:
-                if recv_data == "ConDec" + str(MYIP):
-                        TryCon = False
-                else:
-                        try:
-                                s.connect(Users.values()[yp], PORT)
-                        except:
-                                pass
-                                #print Users.values()[yp]
-	# Others
-	if recv_data[:6] == "UserNm":
-		#if addr[0] != MYIP and addr[0] not in Users.values(): #Connect to others
-		if addr[0] not in Users.values(): #Connect to yourself
-			Users[recv_data[6:]] = addr[0]
-	elif recv_data[:6] == "QuitDe":
-		del Users[recv_data[6:]]
-	elif recv_data[:6 + len(MYIP)] == "ConReq" + str(MYIP):
-                if recv_data not in Requests.keys():
-                        Requests[recv_data] = addr[0]
-        elif recv_data == "Cancel" + str(MYIP):
-                for x in Requests.values():
-                        if addr[0] in x:
-                                del Requests[Requests.keys()[Requests.values().index(str(x))]]
-        
-        if accepted == True:
-                        try:
-                                s.connect((addr[0], PORT))
-                                break
-                        except:
-                                print str(addr[0])
-		
-	
-	y = 10
-        for z in range(len(Users.keys())):
-                if yp == z:
-                        pygame.draw.rect(screen, (20, 20, 20), Rect((10, y), (404, 28)), 0) # OUT SHAPE
-                        pygame.draw.rect(screen, (100, 100, 240), Rect((12, y+2), (400, 24)), 0) # SELECT C # 240
-                        pygame.draw.rect(screen, (1, 1, 1), Rect((14, y+4), (396, 20)), 0) # IN BOX
-                        pygame.draw.rect(screen, (255, 255, 255), Rect((16, y+6), (392, 16)), 0) # Base Box
-                else:
-                        pygame.draw.rect(screen, (20, 20, 20), Rect((10, y), (404, 28)), 0) # OUT SHAPE
-                        pygame.draw.rect(screen, (240, 240, 240), Rect((12, y+2), (400, 24)), 0) # SELECT C # 240
-                        pygame.draw.rect(screen, (1, 1, 1), Rect((14, y+4), (396, 20)), 0) # IN BOX
-                        pygame.draw.rect(screen, (255, 255, 255), Rect((16, y+6), (392, 16)), 0) # Base Box
-                UsersRen = Font.render(Users.keys()[z], 1, (0,0,0))
-                screen.blit(UsersRen, (18 , y+8))
-                
-                for c in Requests.keys():
-                        if Users.keys()[z] == c[12+len(str(MYIP)):]:
-                                pygame.draw.rect(screen, (20, 20, 20), Rect((416, y), (12, 28)), 0)
-                                pygame.draw.rect(screen, (255, 102, 0), Rect((418, y+2), (8, 24)), 0)
-                                if yp == z:
-                                        UserReqA = Font.render("A", 1, (44, 202, 60))
-                                        UserReqS = Font.render("/", 1, (0,0,0))
-                                        UserReqD = Font.render("D", 1, (233, 2, 22))
-                                        screen.blit(UserReqA, (380, y+8))
-                                        screen.blit(UserReqS, (392, y+8))
-                                        screen.blit(UserReqD, (397, y+8))
-                        
-                y += 20
-		
-
-	pygame.draw.rect(screen, (1, 1, 1), Rect((0, 660), (500, 2)), 0)
-	pygame.draw.rect(screen, (255, 255, 255), Rect((0, 662), (500, 38)), 0) # w
-	
-	"""if TryCon == True: # for a planned connetting animation
-                trans = pygame.Surface((490, 690), pygame.SRCALPHA, 32)
-                trans.fill((120, 120, 120, 180))
-                screen.blit(trans, (5,5))"""
-	
-	pygame.display.update()
-	fpsClock.tick(60)
-
-s.settimeout(0)
 while True: #Talking Loop
 	for event in pygame.event.get():
 		if event.type == QUIT:
-			s.sendall(User + " HAS LEFT.#4r5>Ty")
+			broadcast_socket.sendto(User + " HAS LEFT.#4r5>Ty", broadcast)
 			Shutdown = True
 			s.close()
 			pygame.quit()
@@ -251,7 +112,7 @@ while True: #Talking Loop
 					pass
 				else:
 					try:
-						s.sendall(User + ": " + Send)
+						broadcast_socket.sendto(User + ": " + Send, broadcast)
 					except IOError, e:
 						pass
 					Messages.append([Send, 0])
@@ -265,15 +126,15 @@ while True: #Talking Loop
 		
 
 	try:        
-		Received = s.recv(1024)
+		Received, addr = recieve_socket.recvfrom(2048)
 	except:
 		pass
 	if Received != '':
 		Messages.append([Received[6:], 1])
 		Received = ''
 
-	#render Messages
 	x = 634
+	#render Messages
 	for y in range(len(Messages)-1,-1,-1):
 		if x >= -10: # stops rendering above the view max
 			lenx, leny = Font.size(str(Messages[y][0]))
