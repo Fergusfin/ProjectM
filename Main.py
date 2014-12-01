@@ -1,4 +1,4 @@
-#ProjectM ChatRoomBroadcast 1.0.2
+#ProjectM ChatRoomBroadcast 1.1.0.0.0.0.0.0.0.0.0.0.42(:D).0.0.0.0.0.0.0.0.1
 
 #Imports
 import pygame, sys
@@ -34,7 +34,7 @@ HOST = ''
 PORT = 1337
 MYIP = socket.gethostbyname(socket.gethostname()) 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
-scan = ('', 54545)
+scan = ('', 45454)
 recieve_socket = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
 recieve_socket.setsockopt(socket.SOL_SOCKET, socket.SO_REUSEADDR,1)
 recieve_socket.bind(scan)
@@ -85,13 +85,12 @@ while True: #Nameing Loop
 			if timer >= 2000:
 				timer = 0
 		if NameLen == True:
-			User = "UserNm" + User
-			data = User
 			break
 
 	pygame.display.update()
 	fpsClock.tick(60)
 
+broadcast_socket.sendto(User + " HAS JOINED.#H^&,*f", broadcast)
 while True: #Talking Loop
 	for event in pygame.event.get():
 		if event.type == QUIT:
@@ -111,10 +110,7 @@ while True: #Talking Loop
 				if Send == "":
 					pass
 				else:
-					try:
-						broadcast_socket.sendto(User + ": " + Send, broadcast)
-					except IOError, e:
-						pass
+					broadcast_socket.sendto((User + ": " + Send), broadcast)
 					Messages.append([Send, 0])
 					Send = ""
 			else:
@@ -123,14 +119,13 @@ while True: #Talking Loop
 	SendRendered = Font.render(Send, 1, (0,0,0))
 	screen.fill((236, 236, 236))
 	pygame.draw.rect(screen, (1, 1, 1), Rect((0, 660), (500, 4)), 0)
-		
-
-	try:        
+	
+	try:	
 		Received, addr = recieve_socket.recvfrom(2048)
 	except:
 		pass
-	if Received != '':
-		Messages.append([Received[6:], 1])
+	if Received != '' and Received[:len(User)] != User:
+		Messages.append([Received, 1])
 		Received = ''
 
 	x = 634
@@ -146,19 +141,18 @@ while True: #Talking Loop
 				MessagesRendered = Font.render(Messages[y][0], 1, (0,0,0))
 				screen.blit(MessagesRendered, (485 - lenx2 ,x+1))
 			else: # recived
-				if Messages[y][0][-7:] == "#4r5>Ty": # We know of this bug, but... (it's kinda funny)
+				if Messages[y][0][-7:] == "#4r5>Ty":
 					lenx, leny = Font.size(str(Messages[y][0][:-7]))
 					pygame.draw.rect(screen, (1, 1, 1), Rect((6, x-1), (lenx + 8, 20)), 0)
 					pygame.draw.rect(screen, (255, 255, 255), Rect((8, x+1), (lenx + 4, 16)), 0)
-					MessagesRendered = Font.render(Messages[y][0][:-7], 1, (204,42,39))
+					MessagesRendered = Font.render(Messages[y][0][:-7], 1, (240,100,100))
 					screen.blit(MessagesRendered, (10,x+1))
-					if event.type == KEYDOWN:
-						if event.key == K_RETURN:
-							Shutdown = True
-							s.close()
-							pygame.quit()
-							sys.exit()
-					
+				elif Messages[y][0][-7:] == "#H^&,*f":
+					lenx, leny = Font.size(str(Messages[y][0][:-7]))
+					pygame.draw.rect(screen, (1, 1, 1), Rect((6, x-1), (lenx + 8, 20)), 0)
+					pygame.draw.rect(screen, (255, 255, 255), Rect((8, x+1), (lenx + 4, 16)), 0)
+					MessagesRendered = Font.render(Messages[y][0][:-7], 1, (30,215,75))
+					screen.blit(MessagesRendered, (10,x+1))
 				else: # normal
 					pygame.draw.rect(screen, (1, 1, 1), Rect((6, x-1), (lenx + 8, 20)), 0)
 					pygame.draw.rect(screen, (255, 255, 255), Rect((8, x+1), (lenx + 4, 16)), 0)
@@ -177,4 +171,3 @@ while True: #Talking Loop
 
 	pygame.display.update()
 	fpsClock.tick(60)
-
