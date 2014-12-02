@@ -1,4 +1,4 @@
-#ProjectM 1.0.2
+#ProjectM 1.1.0
 
 #Imports
 import pygame, sys
@@ -120,7 +120,7 @@ while True: #Connecting Loop
 			data = "QuitDe" + str(User[6:]) 
 		elif event.type == KEYDOWN:
 			if event.key == K_UP:
-                                if TryCon == True:
+                                if TryCon == True or accepted == True:
                                         pass
                                 else:
                                         if yp == 0:
@@ -128,7 +128,7 @@ while True: #Connecting Loop
                                         else:
                                                 yp -= 1
 			elif event.key == K_DOWN:
-				if TryCon == True:
+				if TryCon == True or accepted == True:
                                         pass
                                 else:
                                         if yp == (len(Users.keys()) -1):
@@ -138,6 +138,7 @@ while True: #Connecting Loop
 			elif event.key == K_a:
                                 if Users.values()[yp] in Requests.values():
                                         accepted = True
+					print accepted
                         elif event.key == K_d:
                                 data = "ConDec" + Users.values()[yp]
                                 for x in Requests.values():
@@ -162,14 +163,15 @@ while True: #Connecting Loop
                         TryCon = False
                 else:
                         try:
-                                s.connect(Users.values()[yp], PORT)
+				CLIENT = Users.values()[yp]
+                                s.connect((CLIENT, PORT))
+				break
                         except:
                                 pass
-                                #print Users.values()[yp]
 	# Others
 	if recv_data[:6] == "UserNm":
-		#if addr[0] != MYIP and addr[0] not in Users.values(): #Connect to others
-		if addr[0] not in Users.values(): #Connect to yourself
+		if addr[0] != MYIP and addr[0] not in Users.values(): #Connect to others
+		#if addr[0] not in Users.values(): #Connect to yourself
 			Users[recv_data[6:]] = addr[0]
 	elif recv_data[:6] == "QuitDe":
 		del Users[recv_data[6:]]
@@ -183,10 +185,11 @@ while True: #Connecting Loop
         
         if accepted == True:
                         try:
-                                s.connect((addr[0], PORT))
+				CLIENT = Users.values()[yp]
+                                s.connect((CLIENT, PORT))
                                 break
                         except:
-                                print str(addr[0])
+                                pass
 		
 	
 	y = 10
@@ -202,7 +205,7 @@ while True: #Connecting Loop
                         pygame.draw.rect(screen, (1, 1, 1), Rect((14, y+4), (396, 20)), 0) # IN BOX
                         pygame.draw.rect(screen, (255, 255, 255), Rect((16, y+6), (392, 16)), 0) # Base Box
                 UsersRen = Font.render(Users.keys()[z], 1, (0,0,0))
-                screen.blit(UsersRen, (18 , y+8))
+                screen.blit(UsersRen, (18 , y+6))
                 
                 for c in Requests.keys():
                         if Users.keys()[z] == c[12+len(str(MYIP)):]:
@@ -216,7 +219,7 @@ while True: #Connecting Loop
                                         screen.blit(UserReqS, (392, y+8))
                                         screen.blit(UserReqD, (397, y+8))
                         
-                y += 20
+                y += 30
 		
 
 	pygame.draw.rect(screen, (1, 1, 1), Rect((0, 660), (500, 2)), 0)
@@ -316,4 +319,3 @@ while True: #Talking Loop
 
 	pygame.display.update()
 	fpsClock.tick(60)
-
