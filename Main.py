@@ -9,6 +9,7 @@ import socket
 pygame.init()
 fpsClock = pygame.time.Clock()
 Font = pygame.font.Font(None, 21)
+Font2 = pygame.font.Font(None, 40)
 
 #Start Display
 screen = pygame.display.set_mode((500, 700))
@@ -223,10 +224,22 @@ while True: #Connecting Loop
 	pygame.draw.rect(screen, (1, 1, 1), Rect((0, 660), (500, 2)), 0)
 	pygame.draw.rect(screen, (255, 255, 255), Rect((0, 662), (500, 38)), 0) # w
 	
-	"""if TryCon == True: # for a planned connetting animation
-                trans = pygame.Surface((490, 690), pygame.SRCALPHA, 32)
+	if TryCon == True or accepted == True: # for a planned connetting animation
+                trans = pygame.Surface((500, 700), pygame.SRCALPHA, 32)
                 trans.fill((120, 120, 120, 180))
-                screen.blit(trans, (5,5))"""
+                screen.blit(trans, (0,0))
+		timer += fpsClock.get_time()
+		if timer <= 1000:
+			ContDot = Font2.render("Connecting", 1, (0,0,0))
+		elif timer <= 2000:
+			ContDot = Font2.render("Connecting.", 1, (0,0,0))
+		elif timer <= 3000:
+			ContDot = Font2.render("Connecting..", 1, (0,0,0))
+		elif timer <= 4000:
+			ContDot = Font2.render("Connecting...", 1, (0,0,0))
+		elif timer <= 5000:
+			timer = 0
+		screen.blit(ContDot, (165, 335))
 	
 	pygame.display.update()
 	fpsClock.tick(60)
