@@ -137,7 +137,6 @@ while True: #Connecting Loop
 			elif event.key == K_a:
                                 if Users.values()[yp] in Requests.values():
                                         accepted = True
-					print accepted
                         elif event.key == K_d:
                                 data = "ConDec" + Users.values()[yp]
                                 for x in Requests.values():
@@ -145,7 +144,7 @@ while True: #Connecting Loop
                                                 del Requests[Requests.keys()[Requests.values().index(str(x))]]
 			elif event.key == K_RETURN:
 				if cp == 0:
-					print "0: Online"
+					pass
 				else:
 					data = "ConReq" + Users.values()[yp] + str(User)
                                         TryCon = True
@@ -214,9 +213,9 @@ while True: #Connecting Loop
                                         UserReqA = Font.render("A", 1, (44, 202, 60))
                                         UserReqS = Font.render("/", 1, (0,0,0))
                                         UserReqD = Font.render("D", 1, (233, 2, 22))
-                                        screen.blit(UserReqA, (380, y+8))
-                                        screen.blit(UserReqS, (392, y+8))
-                                        screen.blit(UserReqD, (397, y+8))
+                                        screen.blit(UserReqA, (380, y+6))
+                                        screen.blit(UserReqS, (392, y+6))
+                                        screen.blit(UserReqD, (397, y+6))
                         
                 y += 30
 		
