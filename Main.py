@@ -4,9 +4,6 @@
 import pygame, sys
 from pygame.locals import *
 import socket
-from threading import Thread
-import time
-from multiprocessing import Queue
 
 #Pygame Initilization
 pygame.init()
@@ -113,11 +110,12 @@ while True: #Connecting Loop
 	cp = len(Users.keys())
 	for event in pygame.event.get():
 		if event.type == QUIT:
+			data = "QuitDe" + str(User[6:])
+			broadcast_socket.sendto(data, broadcast)
 			Shutdown = True
 			s.close()
 			pygame.quit()
 			sys.exit()
-			data = "QuitDe" + str(User[6:]) 
 		elif event.type == KEYDOWN:
 			if event.key == K_UP:
                                 if TryCon == True or accepted == True:
