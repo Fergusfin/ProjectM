@@ -286,24 +286,24 @@ while True: #Talking Loop
 		Received = ''
 
 	#render Messages
-	x = 634
-	for y in range(len(Messages)-1,-1,-1):
-		if x >= -10: # stops rendering above the view max
-			lenx, leny = Font.size(str(Messages[y][0]))
-			lenx2, leny2 = Font.size(str(Messages[y][0]))
-			if Messages[y][1] == 0:
-				pygame.draw.rect(screen, (1, 1, 1), Rect((482 - lenx2, x-1), (lenx2+16, 20)), 0) #black
-				pygame.draw.rect(screen, (255, 255, 255), Rect((484 - lenx2, x+1), (lenx2 + 2, 16)), 0) #white
-				pygame.draw.rect(screen, (26, 169, 174), Rect((488, x+1), (8, 16)), 0) #change for diffent colour
-				MessagesRendered = Font.render(Messages[y][0], 1, (0,0,0))
-				screen.blit(MessagesRendered, (485 - lenx2 ,x+1))
+	y = 634
+	for z in range(len(Messages)-1,-1,-1):
+		if y >= -10: # stops rendering above the view max
+			lenx, leny = Font.size(str(Messages[z][0]))
+			lenx2, leny2 = Font.size(str(Messages[z][0]))
+			if Messages[z][1] == 0:
+				pygame.draw.rect(screen, (1, 1, 1), Rect((482 - lenx2, y-1), (lenx2+16, 20)), 0) #black
+				pygame.draw.rect(screen, (255, 255, 255), Rect((484 - lenx2, y+1), (lenx2 + 2, 16)), 0) #white
+				pygame.draw.rect(screen, (26, 169, 174), Rect((488, y+1), (8, 16)), 0) #change for diffent colour
+				MessagesRendered = Font.render(Messages[z][0], 1, (0,0,0))
+				screen.blit(MessagesRendered, (485 - lenx2 ,y+1))
 			else: # recived
-				if Messages[y][0][-7:] == "#4r5>Ty": # We know of this bug, but... (it's kinda funny)
-					lenx, leny = Font.size(str(Messages[y][0][:-7]))
-					pygame.draw.rect(screen, (1, 1, 1), Rect((6, x-1), (lenx + 8, 20)), 0)
-					pygame.draw.rect(screen, (255, 255, 255), Rect((8, x+1), (lenx + 4, 16)), 0)
-					MessagesRendered = Font.render(Messages[y][0][:-7], 1, (204,42,39))
-					screen.blit(MessagesRendered, (10,x+1))
+				if Messages[z][0][-7:] == "#4r5>Ty": # We know of this bug, but... (it's kinda funny)
+					lenx, leny = Font.size(str(Messages[z][0][:-7]))
+					pygame.draw.rect(screen, (1, 1, 1), Rect((6, y-1), (lenx + 8, 20)), 0)
+					pygame.draw.rect(screen, (255, 255, 255), Rect((8, y+1), (lenx + 4, 16)), 0)
+					MessagesRendered = Font.render(Messages[z][0][:-7], 1, (204,42,39))
+					screen.blit(MessagesRendered, (10,y+1))
 					if event.type == KEYDOWN:
 						if event.key == K_RETURN:
 							Shutdown = True
@@ -312,11 +312,11 @@ while True: #Talking Loop
 							sys.exit()
 					
 				else: # normal
-					pygame.draw.rect(screen, (1, 1, 1), Rect((6, x-1), (lenx + 8, 20)), 0)
-					pygame.draw.rect(screen, (255, 255, 255), Rect((8, x+1), (lenx + 4, 16)), 0)
-					MessagesRendered = Font.render(Messages[y][0], 1, (0,0,0))
-					screen.blit(MessagesRendered, (10,x+1))
-		x -= 24
+					pygame.draw.rect(screen, (1, 1, 1), Rect((6, y-1), (lenx + 8, 20)), 0)
+					pygame.draw.rect(screen, (255, 255, 255), Rect((8, y+1), (lenx + 4, 16)), 0)
+					MessagesRendered = Font.render(Messages[z][0], 1, (0,0,0))
+					screen.blit(MessagesRendered, (10,y+1))
+		y -= 24
 
 	screen.blit(SendRendered, (10,675))
 
