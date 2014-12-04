@@ -20,6 +20,7 @@ pygame.display.update()
 Messages = []
 Send = ""
 timer = 0
+timer2 = 0
 yp = 0
 xp = 0
 TryCon = False
@@ -190,7 +191,11 @@ while True: #Connecting Loop
                         except:
                                 pass
 		
-	
+	if data != User:
+		timer2 += fpsClock.get_time()
+		if timer2 >= 1000:
+			data = User
+
 	y = 10
         for z in range(len(Users.keys())):
                 if yp == z:
