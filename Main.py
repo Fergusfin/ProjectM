@@ -158,6 +158,7 @@ while True: #Connecting Loop
 	# Conneting Requst
         if TryCon == True:
                 if recv_data == "ConDec" + str(MYIP):
+                	data = User
                         TryCon = False
                 else:
                         try:
