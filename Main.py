@@ -168,8 +168,8 @@ while True: #Connecting Loop
                                 pass
 	# Others
 	if recv_data[:6] == "UserNm":
-		if addr[0] != MYIP and addr[0] not in Users.values(): #Connect to others
-		#if addr[0] not in Users.values(): #Connect to yourself
+		#if addr[0] != MYIP and addr[0] not in Users.values(): #Connect to others
+		if addr[0] not in Users.values(): #Connect to yourself
 			Users[recv_data[6:]] = addr[0]
 	elif recv_data[:6] == "QuitDe":
 		del Users[recv_data[6:]]
@@ -247,7 +247,7 @@ s.settimeout(0)
 while True: #Talking Loop
 	for event in pygame.event.get():
 		if event.type == QUIT:
-			s.sendall(User + " HAS LEFT.#4r5>Ty")
+			s.sendall("#4r5>Ty" + User[6:] + " HAS LEFT.")
 			Shutdown = True
 			s.close()
 			pygame.quit()
@@ -264,7 +264,7 @@ while True: #Talking Loop
 					pass
 				else:
 					try:
-						s.sendall(User + ": " + Send)
+						s.sendall(User[6:] + ": " + Send)
 					except IOError, e:
 						pass
 					Messages.append([Send, 0])
@@ -282,7 +282,7 @@ while True: #Talking Loop
 	except:
 		pass
 	if Received != '':
-		Messages.append([Received[6:], 1])
+		Messages.append([Received, 1])
 		Received = ''
 
 	#render Messages
@@ -298,11 +298,11 @@ while True: #Talking Loop
 				MessagesRendered = Font.render(Messages[z][0], 1, (0,0,0))
 				screen.blit(MessagesRendered, (485 - lenx2 ,y+1))
 			else: # recived
-				if Messages[z][0][-7:] == "#4r5>Ty": # We know of this bug, but... (it's kinda funny)
-					lenx, leny = Font.size(str(Messages[z][0][:-7]))
+				if Messages[z][0][:7] == "#4r5>Ty": # We know of this bug, but... (it's kinda funny)
+					lenx, leny = Font.size(str(Messages[z][0][7:]))
 					pygame.draw.rect(screen, (1, 1, 1), Rect((6, y-1), (lenx + 8, 20)), 0)
 					pygame.draw.rect(screen, (255, 255, 255), Rect((8, y+1), (lenx + 4, 16)), 0)
-					MessagesRendered = Font.render(Messages[z][0][:-7], 1, (204,42,39))
+					MessagesRendered = Font.render(Messages[z][0][7:], 1, (204,42,39))
 					screen.blit(MessagesRendered, (10,y+1))
 					if event.type == KEYDOWN:
 						if event.key == K_RETURN:
