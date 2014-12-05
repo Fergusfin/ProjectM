@@ -70,11 +70,9 @@ while True: #Nameing Loop
 			pygame.quit()
 			sys.exit()
 		elif event.type == KEYDOWN:
-			if event.key == K_BACKSPACE:
+			if event.key == K_BACKSPACE or event.key == K_DELETE:
 				User = User[:-1]
-			elif event.key == K_DELETE:
-				User = User[:-1]
-			elif event.key == K_RETURN:
+			elif event.key == K_RETURN or event.key == K_KP_ENTER:
 				User = User.upper()
 				NameLen = True
 			elif event.key == K_KP_ENTER:
@@ -143,7 +141,7 @@ while True: #Connecting Loop
                                 for x in Requests.values():
                                         if addr[0] in x:
                                                 del Requests[Requests.keys()[Requests.values().index(str(x))]]
-			elif event.key == K_RETURN:
+			elif event.key == K_RETURN or event.key == K_KP_ENTER:
 				if cp == 0:
 					pass
 				else:
@@ -259,13 +257,9 @@ while True: #Talking Loop
 			pygame.quit()
 			sys.exit()
 		elif event.type == KEYDOWN:
-			if event.key == K_BACKSPACE:
+			if event.key == K_BACKSPACE or event.key == K_DELETE:
 				Send = Send[:-1]
-			elif event.key == K_DELETE:
-				User = User[:-1]
-			elif event.key == K_KP_ENTER:
-				pass
-			elif event.key == K_RETURN:
+			elif event.key == K_RETURN or event.key == K_KP_ENTER:
 				if Send == "":
 					pass
 				else:
