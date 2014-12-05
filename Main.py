@@ -1,4 +1,4 @@
-#ProjectM 1.1.0
+#ProjectM 0.3.1415962
 
 #Imports
 import pygame, sys
