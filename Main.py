@@ -88,6 +88,8 @@ while True: #Nameing Loop
 	pygame.draw.rect(screen, (255, 255, 255), Rect((183, 602), (134, 16)), 0) # w
 	Name = Font.render(User.upper(), 1, (0,0,0))
 	screen.blit(Name, (184,603))
+	EntUser = Font.render("Enter Username", 1, (0,0,0))
+	screen.blit(EntUser, (191,582))
 
 	if lenx2 >= 126:
 		pass
