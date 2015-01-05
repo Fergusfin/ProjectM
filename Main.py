@@ -1,4 +1,4 @@
-#ProjectM 0.3.1415962
+#ProjectC 0.0.1
 
 #Imports
 import pygame, sys
@@ -32,7 +32,7 @@ data = ''
 accepted = False
 User = ''
 HOST = ''
-PORT = 1337
+PORT = 5678
 MYIP = socket.gethostbyname(socket.gethostname()) 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 scan = ('', 54545)
@@ -290,7 +290,7 @@ while True: #Talking Loop
 	#render Messages
 	y = 634
 	for z in range(len(Messages)-1,-1,-1):
-		if y >= -10: # stops rendering above the view max
+		if y >= 500: # stops rendering above the view max
 			lenx, leny = Font.size(str(Messages[z][0]))
 			lenx2, leny2 = Font.size(str(Messages[z][0]))
 			if Messages[z][1] == 0:
@@ -329,5 +329,21 @@ while True: #Talking Loop
 		if timer >= 2000:
 			timer = 0
 
+	#Game Start
+	pygame.draw.rect(screen, (90, 60, 30), Rect((0, 0), (500, 500)), 0)
+	pygame.draw.rect(screen, (255, 255, 255), Rect((10, 10), (480, 480)), 0)
+	
+	for boardy in range(8):
+		if boardy % 2 == 0:
+			oddeven = 1
+		else:
+			oddeven = 0
+		finalboardy = 60*boardy+10
+		for boardx in range(8):
+			if boardx % 2 == oddeven:
+				pygame.draw.rect(screen, (0, 0, 0), Rect(((60*boardx)+10, finalboardy), (60, 60)), 0)
+	
 	pygame.display.update()
 	fpsClock.tick(60)
+
+#"That's a homeless look thats just for Mr. Thomas, not for me" (Mr. Wong, 2015)
