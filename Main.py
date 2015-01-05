@@ -32,7 +32,7 @@ data = ''
 accepted = False
 User = ''
 HOST = ''
-PORT = 1337
+PORT = 1338
 MYIP = socket.gethostbyname(socket.gethostname()) 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 scan = ('', 54545)
@@ -46,6 +46,62 @@ broadcast_socket.setsockopt(socket.SOL_SOCKET, socket.SO_BROADCAST, 1)
 broadcast_socket.settimeout(0)
 Users = {}
 Requests = {}
+
+
+
+def textcut(text):
+	cut = 0
+	#print text
+	#lenxT, lenxZ = Font.size(text)
+	TextSplit = text.split(" ")
+	TOR = text
+	TNL = ""
+	for x in range(len(TextSplit)):
+		lenxT, lenxZ = Font.size(" ".join(TextSplit))
+		if lenxT > 470:
+			cut += 1
+			if TextSplit[len(TextSplit) - cut] == " ":
+				TNL += " " + TNL
+			else:
+				TNL = TextSplit[len(TextSplit) - cut] + " " + TNL	
+			del TextSplit[-1]
+	else:
+		TOR = " ".join(TextSplit)
+		return TOR, TNL
+
+	"""if len(TextSplit) <= 4: # "-" cut
+		pass
+		#"dash cuting"
+		#look for word just before a good length
+		#cut that word by the letter until it fits with a "-"
+		#for
+			#if
+		#else:
+			#TOR =
+			#TNL =
+	else: # " " cut
+		while lenxT > 140:
+			for x in range(len(TextSplit)):
+				if TextSplit[x] == " ":
+					TOR += " "
+				else:
+					TOR += TextSplit[x] + " "
+			else:
+				TOR = TOR[:-1] # cut "space" off end
+				lenxT, lenxZ = Font.size(TOR)
+		else: # while loop End
+			print str(len(TextSplit) - cut)
+			print str(len(TextSplit))
+			if len(TextSplit) > 4:
+				for x in range(len(TextSplit) - cut, len(TextSplit)): # the other line of text
+					#print x
+					break			
+					#TNL += TextSplit[x] # will have to make a chack for the whole dash cut thing
+			print "TOR " + TOR
+			print "TNL " + TNL
+			return TOR, TNL"""
+
+
 
 while True:
 	try:
@@ -293,7 +349,10 @@ while True: #Talking Loop
 		if y >= -10: # stops rendering above the view max
 			lenx, leny = Font.size(str(Messages[z][0]))
 			lenx2, leny2 = Font.size(str(Messages[z][0]))
+			print textcut(Messages[z][0])
 			if Messages[z][1] == 0:
+				# if len > max:
+					#double box render.........
 				pygame.draw.rect(screen, (1, 1, 1), Rect((482 - lenx2, y-1), (lenx2+16, 20)), 0) #black
 				pygame.draw.rect(screen, (255, 255, 255), Rect((484 - lenx2, y+1), (lenx2 + 2, 16)), 0) #white
 				pygame.draw.rect(screen, (26, 169, 174), Rect((488, y+1), (8, 16)), 0) #change for diffent colour
