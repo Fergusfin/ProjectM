@@ -4,6 +4,7 @@
 import pygame, sys
 from pygame.locals import *
 import socket
+from Tkinter import Tk
 
 #Pygame Initilization
 pygame.init()
@@ -252,6 +253,9 @@ while True: #Connecting Loop
 s.settimeout(0)
 while True: #Talking Loop
 	for event in pygame.event.get():
+		if pygame.key.get_mods() == 4160:
+				if event.key == K_v:
+					Send += Tk().clipboard_get()
 		if event.type == QUIT:
 			s.sendall("#4r5>Ty" + User[6:] + " HAS LEFT.")
 			Shutdown = True
@@ -259,6 +263,7 @@ while True: #Talking Loop
 			pygame.quit()
 			sys.exit()
 		elif event.type == KEYDOWN:
+
 			if event.key == K_BACKSPACE or event.key == K_DELETE:
 				Send = Send[:-1]
 			elif event.key == K_RETURN or event.key == K_KP_ENTER:
@@ -272,7 +277,9 @@ while True: #Talking Loop
 					Messages.append([Send, 0])
 					Send = ""
 			else:
-				Send += event.unicode
+				newinput = event.unicode
+				if newinput != "" or newinput != "	":
+					Send += newinput
 
 	SendRendered = Font.render(Send, 1, (0,0,0))
 	screen.fill((236, 236, 236))
