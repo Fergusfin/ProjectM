@@ -332,7 +332,7 @@ while True: #Talking Loop
 
 	SendRendered = Font.render(Send, 1, (0,0,0))
 	screen.fill((236, 236, 236))
-	pygame.draw.rect(screen, (1, 1, 1), Rect((0, 660), (500, 4)), 0)
+	pygame.draw.rect(screen, (1, 1, 1), Rect((0, 650), (500, 4)), 0)
 		
 
 	try:        
@@ -344,7 +344,7 @@ while True: #Talking Loop
 		Received = ''
 
 	#render Messages
-	y = 634
+	y = 624
 	for z in range(len(Messages)-1,-1,-1):
 		if y >= -10: # stops rendering above the view max
 			lenx, leny = Font.size(str(Messages[z][0]))
@@ -402,13 +402,28 @@ while True: #Talking Loop
 						MessagesRendered = Font.render(Messages[z][0], 1, (0,0,0))
 						screen.blit(MessagesRendered, (10,y+1))
 		y -= 24
-
-	screen.blit(SendRendered, (10,675))
+	
+	#SplitWord2 = textcut(SendRendered)
+	onex, oney = Font.size(User[6:] + ": " + Send)
+	if onex > 485:
+		SplitWord = textcut(Send)
+		twox, twoy = Font.size(SplitWord[1])
+		LineOne = Font.render(SplitWord[0], 1, (0,0,0))
+		LineTwo = Font.render(SplitWord[1], 1, (0,0,0))
+		screen.blit(LineOne, (10,660))
+		screen.blit(LineTwo, (10,678))
+	else:
+		screen.blit(SendRendered, (10,660))
 
 	lenx2, leny2 = Font.size(str(Send))
 	timer += fpsClock.get_time()
 	if timer >= 1000: # blink box
-		pygame.draw.rect(screen, (50, 50, 50), Rect((lenx2 + 10, 676), (9, 15)), 0)
+		if onex < 485:
+			pygame.draw.rect(screen, (50, 50, 50), Rect((lenx2 + 10, 661), (9, 15)), 0)
+		else:
+			SplitWord = textcut(Send)
+			twox, twoy = Font.size(SplitWord[1])
+			pygame.draw.rect(screen, (50, 50, 50), Rect((twox + 9, 679), (9, 15)), 0)
 		if timer >= 2000:
 			timer = 0
 
