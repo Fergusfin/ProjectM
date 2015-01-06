@@ -351,14 +351,14 @@ while True: #Talking Loop
 			lenx2, leny2 = Font.size(str(Messages[z][0]))
 			#print textcut(Messages[z][0])
 			if Messages[z][1] == 0:
-				if lenx > 482:#double box render.........
-					y -= 24
+				if lenx2 > 482:#double box render.........
+					y -= 19
 					SplitWord = textcut(Messages[z][0])
 					onex, oney = Font.size(str(SplitWord[0]))
 					twox, twoy = Font.size(str(SplitWord[1]))
 					pygame.draw.rect(screen, (1, 1, 1), Rect((482 - onex, y-1), (onex+16, 20 + twoy)), 0) #black
 					pygame.draw.rect(screen, (255, 255, 255), Rect((484 - onex, y+1), (onex + 2, 16 + twoy)), 0) #white
-					pygame.draw.rect(screen, (26, 169, 174), Rect((488, y+1), (8, 16 + twoy)), 0)
+					pygame.draw.rect(screen, (26, 169, 174), Rect((488, y+1), (8, 16 + twoy)), 0) # Blue
 					MessagesRendered = Font.render(SplitWord[0], 1, (0,0,0))
 					MessagesRendered2 = Font.render(SplitWord[1], 1, (0,0,0))
 					screen.blit(MessagesRendered, (485 - onex ,y+1))
@@ -385,10 +385,22 @@ while True: #Talking Loop
 							sys.exit()
 					
 				else: # normal
-					pygame.draw.rect(screen, (1, 1, 1), Rect((6, y-1), (lenx + 8, 20)), 0)
-					pygame.draw.rect(screen, (255, 255, 255), Rect((8, y+1), (lenx + 4, 16)), 0)
-					MessagesRendered = Font.render(Messages[z][0], 1, (0,0,0))
-					screen.blit(MessagesRendered, (10,y+1))
+					if lenx > 482:
+						y -= 19
+						SplitWord = textcut(Messages[z][0])
+						onex, oney = Font.size(str(SplitWord[0]))
+						twox, twoy = Font.size(str(SplitWord[1]))
+						pygame.draw.rect(screen, (1, 1, 1), Rect((6, y-1), (onex + 8, 20 + twoy)), 0)
+						pygame.draw.rect(screen, (255, 255, 255), Rect((8, y+1), (onex + 4, 16 + twoy)), 0)
+						MessagesRendered = Font.render(SplitWord[0], 1, (0,0,0))
+						MessagesRendered2 = Font.render(SplitWord[1], 1, (0,0,0))
+						screen.blit(MessagesRendered, (10,y+1))
+						screen.blit(MessagesRendered2, (10,y+19))
+					else:
+						pygame.draw.rect(screen, (1, 1, 1), Rect((6, y-1), (lenx + 8, 20)), 0)
+						pygame.draw.rect(screen, (255, 255, 255), Rect((8, y+1), (lenx + 4, 16)), 0)
+						MessagesRendered = Font.render(Messages[z][0], 1, (0,0,0))
+						screen.blit(MessagesRendered, (10,y+1))
 		y -= 24
 
 	screen.blit(SendRendered, (10,675))
