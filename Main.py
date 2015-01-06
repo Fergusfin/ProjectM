@@ -58,7 +58,7 @@ def textcut(text):
 	TNL = ""
 	for x in range(len(TextSplit)):
 		lenxT, lenxZ = Font.size(" ".join(TextSplit))
-		if lenxT > 470:
+		if lenxT > 482:
 			cut += 1
 			if TextSplit[len(TextSplit) - cut] == " ":
 				TNL += " " + TNL
@@ -349,17 +349,29 @@ while True: #Talking Loop
 		if y >= -10: # stops rendering above the view max
 			lenx, leny = Font.size(str(Messages[z][0]))
 			lenx2, leny2 = Font.size(str(Messages[z][0]))
-			print textcut(Messages[z][0])
+			#print textcut(Messages[z][0])
 			if Messages[z][1] == 0:
-				# if len > max:
-					#double box render.........
-				pygame.draw.rect(screen, (1, 1, 1), Rect((482 - lenx2, y-1), (lenx2+16, 20)), 0) #black
-				pygame.draw.rect(screen, (255, 255, 255), Rect((484 - lenx2, y+1), (lenx2 + 2, 16)), 0) #white
-				pygame.draw.rect(screen, (26, 169, 174), Rect((488, y+1), (8, 16)), 0) #change for diffent colour
-				MessagesRendered = Font.render(Messages[z][0], 1, (0,0,0))
-				screen.blit(MessagesRendered, (485 - lenx2 ,y+1))
+				if lenx > 482:#double box render.........
+					y -= 24
+					SplitWord = textcut(Messages[z][0])
+					onex, oney = Font.size(str(SplitWord[0]))
+					twox, twoy = Font.size(str(SplitWord[1]))
+					pygame.draw.rect(screen, (1, 1, 1), Rect((482 - onex, y-1), (onex+16, 20 + twoy)), 0) #black
+					pygame.draw.rect(screen, (255, 255, 255), Rect((484 - onex, y+1), (onex + 2, 16 + twoy)), 0) #white
+					pygame.draw.rect(screen, (26, 169, 174), Rect((488, y+1), (8, 16 + twoy)), 0)
+					MessagesRendered = Font.render(SplitWord[0], 1, (0,0,0))
+					MessagesRendered2 = Font.render(SplitWord[1], 1, (0,0,0))
+					screen.blit(MessagesRendered, (485 - onex ,y+1))
+					screen.blit(MessagesRendered2, (485 - onex ,y+19))
+					
+				else:
+					pygame.draw.rect(screen, (1, 1, 1), Rect((482 - lenx2, y-1), (lenx2+16, 20)), 0) #black
+					pygame.draw.rect(screen, (255, 255, 255), Rect((484 - lenx2, y+1), (lenx2 + 2, 16)), 0) #white
+					pygame.draw.rect(screen, (26, 169, 174), Rect((488, y+1), (8, 16)), 0) #change for diffent colour
+					MessagesRendered = Font.render(Messages[z][0], 1, (0,0,0))
+					screen.blit(MessagesRendered, (485 - lenx2 ,y+1))
 			else: # recived
-				if Messages[z][0][:7] == "#4r5>Ty": # We know of this bug, but... (it's kinda funny)
+				if Messages[z][0][:7] == "#4r5>Ty":
 					lenx, leny = Font.size(str(Messages[z][0][7:]))
 					pygame.draw.rect(screen, (1, 1, 1), Rect((6, y-1), (lenx + 8, 20)), 0)
 					pygame.draw.rect(screen, (255, 255, 255), Rect((8, y+1), (lenx + 4, 16)), 0)
