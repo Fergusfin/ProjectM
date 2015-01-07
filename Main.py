@@ -403,8 +403,7 @@ while True: #Talking Loop
 						screen.blit(MessagesRendered, (10,y+1))
 		y -= 24
 	
-	#SplitWord2 = textcut(SendRendered)
-	onex, oney = Font.size(User[6:] + ": " + Send)
+	onex, oney = Font.size(Send)
 	if onex > 485:
 		SplitWord = textcut(Send)
 		twox, twoy = Font.size(SplitWord[1])
