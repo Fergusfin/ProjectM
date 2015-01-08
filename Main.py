@@ -286,17 +286,11 @@ while True: #Talking Loop
 
 	try:        
 		Received = s.recv(1024)
-		print Received
 		decoded = Received[::-1]
-		print decoded
 		decoded = base64.b16decode(decoded)
-		print decoded
 		decoded = base64.b32decode(decoded)
-		print decoded
 		decoded = decoded.swapcase()
-		print decoded
 		decoded = base64.b64decode(decoded)
-		print decoded
 	except:
 		pass
 	if Received != '':
