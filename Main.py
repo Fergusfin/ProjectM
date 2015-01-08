@@ -4,6 +4,7 @@
 import pygame, sys
 from pygame.locals import *
 import socket
+import base64
 
 #Pygame Initilization
 pygame.init()
@@ -266,7 +267,12 @@ while True: #Talking Loop
 					pass
 				else:
 					try:
-						s.sendall(User[6:] + ": " + Send)
+						encoded = base64.b64encode(User[6:] + ": " + Send)
+						encoded = encoded.swapcase()
+						encoded = base64.b32encode(encoded)
+						encoded = base64.b16encode(encoded)
+						encoded = encoded[::-1]
+						s.sendall(encoded)
 					except IOError, e:
 						pass
 					Messages.append([Send, 0])
@@ -277,14 +283,24 @@ while True: #Talking Loop
 	SendRendered = Font.render(Send, 1, (0,0,0))
 	screen.fill((236, 236, 236))
 	pygame.draw.rect(screen, (1, 1, 1), Rect((0, 660), (500, 4)), 0)
-		
 
 	try:        
 		Received = s.recv(1024)
+		print Received
+		decoded = Received[::-1]
+		print decoded
+		decoded = base64.b16decode(decoded)
+		print decoded
+		decoded = base64.b32decode(decoded)
+		print decoded
+		decoded = decoded.swapcase()
+		print decoded
+		decoded = base64.b64decode(decoded)
+		print decoded
 	except:
 		pass
 	if Received != '':
-		Messages.append([Received, 1])
+		Messages.append([decoded, 1])
 		Received = ''
 
 	#render Messages
