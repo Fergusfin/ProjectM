@@ -54,9 +54,48 @@ def textcut(text):
 	#print text
 	#lenxT, lenxZ = Font.size(text)
 	TextSplit = text.split(" ")
-	TOR = text
-	TNL = ""
-	for x in range(len(TextSplit)):
+	Runs = len(TextSplit)-1
+	Ln1 = []
+	Ln2 = []
+	while True:
+		for y in range(0, Runs):
+			lenx, leny = Font.size("".join(Ln1))		
+			if lenx > 485:
+				cut = y
+				print str(cut)	
+				break
+			else:
+				Ln1.append(TextSplit[y])
+				del TextSplit[-1:]
+				Runs = len(TextSplit)-1
+		else:
+			del Ln1[-1]
+			Ln1 = " ".join(Ln1)
+			Ln2 = " ".join(TextSplit)
+			print Ln1
+			print Ln2		
+			return Ln1, Ln2
+			break
+		
+		"""lenx, leny = Font.size("".join(New))
+		if lenx < 485:
+			print "Yes"
+			cut += 1
+			print str(cut)
+			New = []
+		else:
+			del New[-1]
+			for z in range(cut, len(textSplit)):
+				Ln2.append(TextSplit[z])
+			New = "".join(New)
+			Ln2 = "".join(Ln2)
+			print "You got here"
+			print New
+			print Ln2		
+			return New, Ln2
+			break"""
+				
+	"""for x in range(len(TextSplit)):
 		lenxT, lenxZ = Font.size(" ".join(TextSplit))
 		if lenxT > 482:
 			cut += 1
@@ -67,7 +106,7 @@ def textcut(text):
 			del TextSplit[-1]
 	else:
 		TOR = " ".join(TextSplit)
-		return TOR, TNL
+		return TOR, TNL"""
 
 	"""if len(TextSplit) <= 4: # "-" cut
 		pass
@@ -404,7 +443,7 @@ while True: #Talking Loop
 		y -= 24
 	
 	onex, oney = Font.size(Send)
-	if onex > 485:
+	if onex > 485:		
 		SplitWord = textcut(Send)
 		twox, twoy = Font.size(SplitWord[1])
 		LineOne = Font.render(SplitWord[0], 1, (0,0,0))
