@@ -49,33 +49,41 @@ Requests = {}
 
 
 
-def textcut(text):
+def textcut(text,line):
 	cut = 0
 	#print text
 	#lenxT, lenxZ = Font.size(text)
 	TextSplit = text.split(" ")
-	Runs = len(TextSplit)-1
+	Runs = len(TextSplit)
 	Ln1 = []
 	Ln2 = []
+	print "Start"
 	while True:
-		for y in range(0, Runs):
-			lenx, leny = Font.size("".join(Ln1))		
-			if lenx > 485:
-				cut = y
-				print str(cut)	
-				break
+		print "run"
+		lenx, leny = Font.size(" ".join(TextSplit[:cut]))
+		print " ".join(TextSplit[:cut])
+		print str(lenx)		
+		if lenx > 485:
+			cut -= 1
+			Ln1 = " ".join(TextSplit[:cut])
+			Ln2 = " ".join(TextSplit[cut:])
+			print Ln2
+			if line == 1:
+				return Ln1
 			else:
-				Ln1.append(TextSplit[y])
-				del TextSplit[-1:]
-				Runs = len(TextSplit)-1
+				return Ln2
+			break
 		else:
-			del Ln1[-1]
+			print "1"
+			cut += 1
+			
+		"""else:
 			Ln1 = " ".join(Ln1)
 			Ln2 = " ".join(TextSplit)
 			print Ln1
 			print Ln2		
 			return Ln1, Ln2
-			break
+			break"""
 		
 		"""lenx, leny = Font.size("".join(New))
 		if lenx < 485:
@@ -426,13 +434,12 @@ while True: #Talking Loop
 				else: # normal
 					if lenx > 482:
 						y -= 19
-						SplitWord = textcut(Messages[z][0])
-						onex, oney = Font.size(str(SplitWord[0]))
-						twox, twoy = Font.size(str(SplitWord[1]))
+						onex, oney = Font.size(str(textcut(Send, 1)))
+						twox, twoy = Font.size(str(textcut(Send, 2)))
 						pygame.draw.rect(screen, (1, 1, 1), Rect((6, y-1), (onex + 8, 20 + twoy)), 0)
 						pygame.draw.rect(screen, (255, 255, 255), Rect((8, y+1), (onex + 4, 16 + twoy)), 0)
-						MessagesRendered = Font.render(SplitWord[0], 1, (0,0,0))
-						MessagesRendered2 = Font.render(SplitWord[1], 1, (0,0,0))
+						MessagesRendered = Font.render(textcut(Send, 1), 1, (0,0,0))
+						MessagesRendered2 = Font.render(textcut(Send, 2), 1, (0,0,0))
 						screen.blit(MessagesRendered, (10,y+1))
 						screen.blit(MessagesRendered2, (10,y+19))
 					else:
@@ -444,10 +451,9 @@ while True: #Talking Loop
 	
 	onex, oney = Font.size(Send)
 	if onex > 485:		
-		SplitWord = textcut(Send)
-		twox, twoy = Font.size(SplitWord[1])
-		LineOne = Font.render(SplitWord[0], 1, (0,0,0))
-		LineTwo = Font.render(SplitWord[1], 1, (0,0,0))
+		twox, twoy = Font.size(textcut(Send, 2))
+		LineOne = Font.render(textcut(Send, 1), 1, (0,0,0))
+		LineTwo = Font.render(textcut(Send, 2), 1, (0,0,0))
 		screen.blit(LineOne, (10,660))
 		screen.blit(LineTwo, (10,678))
 	else:
@@ -459,8 +465,7 @@ while True: #Talking Loop
 		if onex < 485:
 			pygame.draw.rect(screen, (50, 50, 50), Rect((lenx2 + 10, 661), (9, 15)), 0)
 		else:
-			SplitWord = textcut(Send)
-			twox, twoy = Font.size(SplitWord[1])
+			twox, twoy = Font.size(textcut(Send, 2))
 			pygame.draw.rect(screen, (50, 50, 50), Rect((twox + 9, 679), (9, 15)), 0)
 		if timer >= 2000:
 			timer = 0
