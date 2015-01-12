@@ -32,7 +32,7 @@ data = ''
 accepted = False
 User = ''
 HOST = ''
-PORT = 1338
+PORT = 1337
 MYIP = socket.gethostbyname(socket.gethostname()) 
 s = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
 scan = ('', 54545)
@@ -353,13 +353,17 @@ while True: #Talking Loop
 					SplitWord = textcut(Messages[z][0])
 					onex, oney = Font.size(str(SplitWord[0]))
 					twox, twoy = Font.size(str(SplitWord[1]))
-					pygame.draw.rect(screen, (1, 1, 1), Rect((482 - onex, y-1), (onex+16, 20 + twoy)), 0) #black
-					pygame.draw.rect(screen, (255, 255, 255), Rect((484 - onex, y+1), (onex + 2, 16 + twoy)), 0) #white
+					if onex >= twox:
+						sizex = onex
+					else:
+						sizex = twox
+					pygame.draw.rect(screen, (1, 1, 1), Rect((482 - sizex, y-1), (sizex+16, 20 + twoy)), 0) #black
+					pygame.draw.rect(screen, (255, 255, 255), Rect((484 - sizex, y+1), (sizex + 2, 16 + twoy)), 0) #white
 					pygame.draw.rect(screen, (26, 169, 174), Rect((488, y+1), (8, 16 + twoy)), 0) # Blue
 					MessagesRendered = Font.render(SplitWord[0], 1, (0,0,0))
 					MessagesRendered2 = Font.render(SplitWord[1], 1, (0,0,0))
-					screen.blit(MessagesRendered, (485 - onex ,y+1))
-					screen.blit(MessagesRendered2, (485 - onex ,y+19))
+					screen.blit(MessagesRendered, (485 - sizex ,y+1))
+					screen.blit(MessagesRendered2, (485 - sizex ,y+19))
 					
 				else:
 					pygame.draw.rect(screen, (1, 1, 1), Rect((482 - lenx2, y-1), (lenx2+16, 20)), 0) #black
@@ -387,8 +391,12 @@ while True: #Talking Loop
 						SplitWord = textcut(Messages[z][0])
 						onex, oney = Font.size(str(SplitWord[0]))
 						twox, twoy = Font.size(str(SplitWord[1]))
-						pygame.draw.rect(screen, (1, 1, 1), Rect((6, y-1), (onex + 8, 20 + twoy)), 0)
-						pygame.draw.rect(screen, (255, 255, 255), Rect((8, y+1), (onex + 4, 16 + twoy)), 0)
+						if onex >= twox:
+							sizex = onex
+						else:
+							sizex = twox
+						pygame.draw.rect(screen, (1, 1, 1), Rect((6, y-1), (sizex + 8, 20 + twoy)), 0)
+						pygame.draw.rect(screen, (255, 255, 255), Rect((8, y+1), (sizex + 4, 16 + twoy)), 0)
 						MessagesRendered = Font.render(SplitWord[0], 1, (0,0,0))
 						MessagesRendered2 = Font.render(SplitWord[1], 1, (0,0,0))
 						screen.blit(MessagesRendered, (10,y+1))
@@ -419,7 +427,7 @@ while True: #Talking Loop
 		else:
 			SplitWord = textcut(Send)
 			twox, twoy = Font.size(SplitWord[1])
-			pygame.draw.rect(screen, (50, 50, 50), Rect((twox + 9, 679), (9, 15)), 0)
+			pygame.draw.rect(screen, (50, 50, 50), Rect((twox + 10, 679), (9, 15)), 0)
 		if timer >= 2000:
 			timer = 0
 
