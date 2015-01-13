@@ -48,6 +48,23 @@ broadcast_socket.settimeout(0)
 Users = {}
 Requests = {}
 
+def textcut(text):
+	cut = 0
+	TextSplit = text.split(" ")
+	Runs = len(TextSplit)
+	Ln1 = []
+	Ln2 = []
+	while True:
+		lenx, leny = Font.size(" ".join(TextSplit[:cut]))		
+		if lenx > 485:
+			cut -= 1
+			Ln1 = " ".join(TextSplit[:cut])
+			Ln2 = " ".join(TextSplit[cut:])
+			return Ln1, Ln2
+			break
+		else:
+			cut += 1
+
 while True:
 	try:
 		s.bind((HOST, PORT))
@@ -278,11 +295,13 @@ while True: #Talking Loop
 					Messages.append([Send, 0])
 					Send = ""
 			else:
-				Send += event.unicode
+				lenx, leny = Font.size(User[6:] + ": " + Send)
+				if lenx < 962:
+					Send += event.unicode
 
 	SendRendered = Font.render(Send, 1, (0,0,0))
 	screen.fill((236, 236, 236))
-	pygame.draw.rect(screen, (1, 1, 1), Rect((0, 660), (500, 4)), 0)
+	pygame.draw.rect(screen, (1, 1, 1), Rect((0, 650), (500, 4)), 0)
 
 	try:        
 		Received = s.recv(1024)
@@ -298,19 +317,38 @@ while True: #Talking Loop
 		Received = ''
 
 	#render Messages
-	y = 634
+	y = 624
 	for z in range(len(Messages)-1,-1,-1):
 		if y >= -10: # stops rendering above the view max
 			lenx, leny = Font.size(str(Messages[z][0]))
 			lenx2, leny2 = Font.size(str(Messages[z][0]))
+			#print textcut(Messages[z][0])
 			if Messages[z][1] == 0:
-				pygame.draw.rect(screen, (1, 1, 1), Rect((482 - lenx2, y-1), (lenx2+16, 20)), 0) #black
-				pygame.draw.rect(screen, (255, 255, 255), Rect((484 - lenx2, y+1), (lenx2 + 2, 16)), 0) #white
-				pygame.draw.rect(screen, (26, 169, 174), Rect((488, y+1), (8, 16)), 0) #change for diffent colour
-				MessagesRendered = Font.render(Messages[z][0], 1, (0,0,0))
-				screen.blit(MessagesRendered, (485 - lenx2 ,y+1))
+				if lenx2 > 482:#double box render.........
+					y -= 19
+					SplitWord = textcut(Messages[z][0])
+					onex, oney = Font.size(str(SplitWord[0]))
+					twox, twoy = Font.size(str(SplitWord[1]))
+					if onex >= twox:
+						sizex = onex
+					else:
+						sizex = twox
+					pygame.draw.rect(screen, (1, 1, 1), Rect((482 - sizex, y-1), (sizex+16, 20 + twoy)), 0) #black
+					pygame.draw.rect(screen, (255, 255, 255), Rect((484 - sizex, y+1), (sizex + 2, 16 + twoy)), 0) #white
+					pygame.draw.rect(screen, (26, 169, 174), Rect((488, y+1), (8, 16 + twoy)), 0) # Blue
+					MessagesRendered = Font.render(SplitWord[0], 1, (0,0,0))
+					MessagesRendered2 = Font.render(SplitWord[1], 1, (0,0,0))
+					screen.blit(MessagesRendered, (485 - sizex ,y+1))
+					screen.blit(MessagesRendered2, (485 - sizex ,y+19))
+					
+				else:
+					pygame.draw.rect(screen, (1, 1, 1), Rect((482 - lenx2, y-1), (lenx2+16, 20)), 0) #black
+					pygame.draw.rect(screen, (255, 255, 255), Rect((484 - lenx2, y+1), (lenx2 + 2, 16)), 0) #white
+					pygame.draw.rect(screen, (26, 169, 174), Rect((488, y+1), (8, 16)), 0) #change for diffent colour
+					MessagesRendered = Font.render(Messages[z][0], 1, (0,0,0))
+					screen.blit(MessagesRendered, (485 - lenx2 ,y+1))
 			else: # recived
-				if Messages[z][0][:7] == "#4r5>Ty": # We know of this bug, but... (it's kinda funny)
+				if Messages[z][0][:7] == "#4r5>Ty":
 					lenx, leny = Font.size(str(Messages[z][0][7:]))
 					pygame.draw.rect(screen, (1, 1, 1), Rect((6, y-1), (lenx + 8, 20)), 0)
 					pygame.draw.rect(screen, (255, 255, 255), Rect((8, y+1), (lenx + 4, 16)), 0)
@@ -324,18 +362,48 @@ while True: #Talking Loop
 							sys.exit()
 					
 				else: # normal
-					pygame.draw.rect(screen, (1, 1, 1), Rect((6, y-1), (lenx + 8, 20)), 0)
-					pygame.draw.rect(screen, (255, 255, 255), Rect((8, y+1), (lenx + 4, 16)), 0)
-					MessagesRendered = Font.render(Messages[z][0], 1, (0,0,0))
-					screen.blit(MessagesRendered, (10,y+1))
+					if lenx > 482:
+						y -= 19
+						SplitWord = textcut(Messages[z][0])
+						onex, oney = Font.size(str(SplitWord[0]))
+						twox, twoy = Font.size(str(SplitWord[1]))
+						if onex >= twox:
+							sizex = onex
+						else:
+							sizex = twox
+						pygame.draw.rect(screen, (1, 1, 1), Rect((6, y-1), (sizex + 8, 20 + twoy)), 0)
+						pygame.draw.rect(screen, (255, 255, 255), Rect((8, y+1), (sizex + 4, 16 + twoy)), 0)
+						MessagesRendered = Font.render(SplitWord[0], 1, (0,0,0))
+						MessagesRendered2 = Font.render(SplitWord[1], 1, (0,0,0))
+						screen.blit(MessagesRendered, (10,y+1))
+						screen.blit(MessagesRendered2, (10,y+19))
+					else:
+						pygame.draw.rect(screen, (1, 1, 1), Rect((6, y-1), (lenx + 8, 20)), 0)
+						pygame.draw.rect(screen, (255, 255, 255), Rect((8, y+1), (lenx + 4, 16)), 0)
+						MessagesRendered = Font.render(Messages[z][0], 1, (0,0,0))
+						screen.blit(MessagesRendered, (10,y+1))
 		y -= 24
 
-	screen.blit(SendRendered, (10,675))
+	onex, oney = Font.size(Send)
+	if onex > 485:
+		SplitWord = textcut(Send)
+		twox, twoy = Font.size(SplitWord[1])
+		LineOne = Font.render(SplitWord[0], 1, (0,0,0))
+		LineTwo = Font.render(SplitWord[1], 1, (0,0,0))
+		screen.blit(LineOne, (10,660))
+		screen.blit(LineTwo, (10,678))
+	else:
+		screen.blit(SendRendered, (10,660))
 
 	lenx2, leny2 = Font.size(str(Send))
 	timer += fpsClock.get_time()
 	if timer >= 1000: # blink box
-		pygame.draw.rect(screen, (50, 50, 50), Rect((lenx2 + 10, 676), (9, 15)), 0)
+		if onex < 485:
+			pygame.draw.rect(screen, (50, 50, 50), Rect((lenx2 + 10, 661), (9, 15)), 0)
+		else:
+			SplitWord = textcut(Send)
+			twox, twoy = Font.size(SplitWord[1])
+			pygame.draw.rect(screen, (50, 50, 50), Rect((twox + 10, 679), (9, 15)), 0)
 		if timer >= 2000:
 			timer = 0
 
