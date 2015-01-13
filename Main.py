@@ -325,7 +325,9 @@ while True: #Talking Loop
 					Messages.append([Send, 0])
 					Send = ""
 			else:
-				Send += event.unicode
+				lenx, leny = Font.size(User[6:] + ": " + Send)
+				if lenx < 962:
+					Send += event.unicode
 
 	SendRendered = Font.render(Send, 1, (0,0,0))
 	screen.fill((236, 236, 236))
