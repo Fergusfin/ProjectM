@@ -66,40 +66,6 @@ def textcut(text):
 		else:
 			cut += 1
 
-	"""if len(TextSplit) <= 4: # "-" cut
-		pass
-		#"dash cuting"
-		#look for word just before a good length
-		#cut that word by the letter until it fits with a "-"
-		#for
-			#if
-		#else:
-			#TOR =
-			#TNL =
-	else: # " " cut
-		while lenxT > 140:
-			for x in range(len(TextSplit)):
-				if TextSplit[x] == " ":
-					TOR += " "
-				else:
-					TOR += TextSplit[x] + " "
-			else:
-				TOR = TOR[:-1] # cut "space" off end
-				lenxT, lenxZ = Font.size(TOR)
-		else: # while loop End
-			print str(len(TextSplit) - cut)
-			print str(len(TextSplit))
-			if len(TextSplit) > 4:
-				for x in range(len(TextSplit) - cut, len(TextSplit)): # the other line of text
-					#print x
-					break			
-					#TNL += TextSplit[x] # will have to make a chack for the whole dash cut thing
-			print "TOR " + TOR
-			print "TNL " + TNL
-			return TOR, TNL"""
-
-
-
 while True:
 	try:
 		s.bind((HOST, PORT))
