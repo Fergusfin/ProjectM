@@ -1,4 +1,4 @@
-#ProjectM 0.3.1415962
+#ProjectM 1.0.0
 
 #Imports
 import pygame, sys
@@ -203,8 +203,8 @@ while True: #Connecting Loop
                                 pass
 	# Others
 	if recv_data[:6] == "UserNm":
-		#if addr[0] != MYIP and addr[0] not in Users.values(): #Connect to others
-		if addr[0] not in Users.values(): #Connect to yourself
+		if addr[0] != MYIP and addr[0] not in Users.values(): #Connect to others
+		#if addr[0] not in Users.values(): #Connect to yourself
 			Users[recv_data[6:]] = addr[0]
 	elif recv_data[:6] == "QuitDe":
 		del Users[recv_data[6:]]
