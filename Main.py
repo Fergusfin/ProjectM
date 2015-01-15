@@ -48,6 +48,22 @@ broadcast_socket.settimeout(0)
 Users = {}
 Requests = {}
 
+def encode(text):
+	encoded = base64.b64encode(text)
+	encoded = encoded.swapcase()
+	encoded = base64.b32encode(encoded)
+	encoded = base64.b16encode(encoded)
+	encoded = encoded[::-1]
+	return encoded
+
+def decode(text):
+	decoded = text[::-1]
+	decoded = base64.b16decode(decoded)
+	decoded = base64.b32decode(decoded)
+	decoded = decoded.swapcase()
+	decoded = base64.b64decode(decoded)
+	return decoded
+
 def textcut(text):
 	cut = 0
 	TextSplit = text.split(" ")
@@ -271,7 +287,7 @@ s.settimeout(0)
 while True: #Talking Loop
 	for event in pygame.event.get():
 		if event.type == QUIT:
-			s.sendall("#4r5>Ty" + User[6:] + " HAS LEFT.")
+			s.sendall(encode("#4r5>Ty" + User[6:] + " HAS LEFT."))
 			Shutdown = True
 			s.close()
 			pygame.quit()
@@ -284,12 +300,7 @@ while True: #Talking Loop
 					pass
 				else:
 					try:
-						encoded = base64.b64encode(User[6:] + ": " + Send)
-						encoded = encoded.swapcase()
-						encoded = base64.b32encode(encoded)
-						encoded = base64.b16encode(encoded)
-						encoded = encoded[::-1]
-						s.sendall(encoded)
+						s.sendall(encode(User[6:] + ": " + Send))
 					except IOError, e:
 						pass
 					Messages.append([Send, 0])
@@ -305,15 +316,10 @@ while True: #Talking Loop
 
 	try:        
 		Received = s.recv(1024)
-		decoded = Received[::-1]
-		decoded = base64.b16decode(decoded)
-		decoded = base64.b32decode(decoded)
-		decoded = decoded.swapcase()
-		decoded = base64.b64decode(decoded)
 	except:
 		pass
 	if Received != '':
-		Messages.append([decoded, 1])
+		Messages.append([decode(Received), 1])
 		Received = ''
 
 	#render Messages
