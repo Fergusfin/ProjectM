@@ -107,10 +107,9 @@ while True: #Nameing Loop
 			if event.key == K_BACKSPACE or event.key == K_DELETE:
 				User = User[:-1]
 			elif event.key == K_RETURN or event.key == K_KP_ENTER:
-				User = User.upper()
-				NameLen = True
-			elif event.key == K_KP_ENTER:
-				pass
+				if User != "":
+					User = User.upper()
+					NameLen = True
 			elif lenx2 >= 126:
 				pass
 			else:
