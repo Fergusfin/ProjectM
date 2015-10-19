@@ -169,13 +169,18 @@ while True: #Connecting Loop
                                         else:
                                                 yp += 1
 			elif event.key == K_a:
-                                if Users.values()[yp] in Requests.values():
+                                if cp == 0:
+                                        pass
+                                elif Users.values()[yp] in Requests.values():
                                         accepted = True
                         elif event.key == K_d:
-                                data = "ConDec" + Users.values()[yp]
-                                for x in Requests.values():
-                                        if addr[0] in x:
-                                                del Requests[Requests.keys()[Requests.values().index(str(x))]]
+                                if cp == 0:
+                                        pass
+                                else:
+                                        data = "ConDec" + Users.values()[yp]
+                                        for x in Requests.values():
+                                                if addr[0] in x:
+                                                        del Requests[Requests.keys()[Requests.values().index(str(x))]]
 			elif event.key == K_RETURN or event.key == K_KP_ENTER:
 				if cp == 0:
 					pass
